@@ -10,8 +10,7 @@ from lib.BizTransfer import Enterprise
 from flask_pymongo import PyMongo
 
 
-app.config['MONGO_DBNAME'] = 'biztransfer'
-app.config['MONGO_URI'] = 'mongodb://mac:mac@ds243055.mlab.com:43055/biztransfer'
+
 client = MongoClient('ds243055.mlab.com', 43055)
 db = client['biztransfer']
 db.authenticate('mac', 'mac')
@@ -29,6 +28,8 @@ class EnterpriseForm(Form):
 # THE APP
 
 app = Flask(__name__)
+app.config['MONGO_DBNAME'] = 'biztransfer'
+app.config['MONGO_URI'] = 'mongodb://mac:mac@ds243055.mlab.com:43055/biztransfer'
 
 @app.route("/", methods=["GET"])
 def index():
