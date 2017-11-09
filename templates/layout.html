@@ -1,0 +1,82 @@
+<html>
+<head>
+  <title>BizTransfer.ca</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+
+{% include "_navbar.html" %}
+
+
+<div class="container">
+
+  <div class="row row-offcanvas row-offcanvas-right">
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+      <div class="list-group">
+            <a href="#" class="list-group-item active">{{ self }}</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="/add-biz" class="list-group-item">Add new listing</a>
+      </div>
+
+    </div><!--/.sidebar-offcanvas-->
+
+    <div class="col-xs-12 col-sm-9">
+      <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+      </p>
+
+        {% include "includes/_messages.html" %}
+
+{% block content %}
+
+
+{% endblock %}
+
+    </div><!--/.col-xs-12.col-sm-9-->
+
+  </div><!--/row-->
+
+</div>
+
+
+
+<div class="container-fluid container">
+  <div class="row">
+
+            <hr>
+            <footer>
+            <p>&copy; 2017 BizTransfer Inc.</p>
+            </footer>
+
+      </div>
+</div>
+
+
+
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>

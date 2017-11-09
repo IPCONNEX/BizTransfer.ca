@@ -1,0 +1,31 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">{{ result['entr_name'] }}</div>
+
+  <!-- Table -->
+ <table class="table" style="width:100%">
+  <tr>
+    <th width="50%">ID of the entreprise</th>
+    <th width="50%">{{ result['id'].rjust(6, '0') }}</th>
+  </tr>
+  <tr>
+    <td>Nom de l'entreprise</td>
+    <td>{{ result['entr_name'] }}</td>
+  </tr>
+  <tr>
+    <td>NEQ</td>
+    <td>{{ result['neq'] }}</td>
+  </tr>
+
+</table>
+</div>
+
+
+{% endblock %}
+
