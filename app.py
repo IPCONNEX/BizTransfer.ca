@@ -8,6 +8,8 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, DecimalFiel
 from passlib.hash import sha256_crypt
 from lib.BizTransfer import Enterprise
 from flask_pymongo import PyMongo
+import time
+import json
 
 
 
@@ -30,17 +32,16 @@ class EnterpriseForm(Form):
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'biztransfer'
 app.config['MONGO_URI'] = 'mongodb://mac:mac@ds243055.mlab.com:43055/biztransfer'
+mongo = PyMongo(app)
 
 @app.route("/", methods=["GET"])
 def index():
-    data = []
-    for post in enterprisesDB.find():
-        data.append(post)
+    data = mongo.db.enterprises.find()
     return render_template('index.html', data=data)
 
-@app.route("/ent/<string:id>", methods=["GET"])
-def entProfile(id):
-    result = enterprisesDB.find_one({"id":id})
+@app.route("/ent/<string:id>/", methods=["GET"])
+def ent(id):
+    result = mongo.db.enterprises.find_one({"id":id})
     return render_template('entreprise.html', result=result, id=id)
 
 @app.route("/add-biz/", methods=["GET", "POST"])
@@ -51,20 +52,31 @@ def addBiz():
         if newId not in IdList:
             break
     form = EnterpriseForm(request.form)
+
     if request.method == 'POST' and form.validate():
-        newEnt = {}
-        print("STEP REACHED")
-        newEnt['entr_name'] = form.ent_name.data
-        newEnt['neq'] = str(form.neq.data)
-        newEnt['contact'] = form.contact.data
-        newEnt['email'] = form.email.data
-        newEnt['phone'] = str(form.phone.data)
-        newEnt['ebitda'] = int(str(form.ebitda.data))
-        enterprisesDB.insert_one(newEnt).inserted_id
-        flash("You successfuly entered your enterprise", "success")
-        redirect(url_for('/ent/' + newId))
+        if mongo.db.enterprises.find({'neq' : str(form.neq.data)}).count() > 0:
+            flash("This company already exists", "danger")
+            return render_template('addbiz.html', form=form, newId=newId)
+        mongo.db.enterprises.insert({'id':newId, 'entr_name': form.ent_name.data, 'neq': str(form.neq.data),
+            'contact': form.contact.data, 'email': form.email.data, 'phone': str(form.phone.data),
+            'ebitda': int(str(form.ebitda.data))})
+        flash("You successfully entered your enterprise", "success")
+        time.sleep(0.1)
+        return redirect(url_for('ent', id=newId))
+
     return render_template('addbiz.html', form=form, newId=newId)
 
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    return 0
+
+@app.route("/register", methods=['POST, GET'])
+def register():
+    if request.method = 'POST':
+        existingUser = mongo.db.users.find_one({'name' : request.form['username']})
+
+        if not existingUser:
+            hashpass = bcrypt.hashpw(request.form['password'])
 
 
 if __name__ == '__main__':
