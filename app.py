@@ -19,6 +19,7 @@ db.authenticate('mac', 'mac')
 enterprisesDB = db['enterprises']
 posts = db.enterprisesDB
 
+
 class EnterpriseForm(Form):
     ent_name = StringField('Enterprise name', [validators.length(min=5, max= 50)])
     neq = DecimalField('NEQ')
@@ -26,6 +27,14 @@ class EnterpriseForm(Form):
     email = StringField('Email', [validators.length(min=6, max= 50)])
     phone = DecimalField('Phone')
     ebitda = DecimalField('EBITDA')
+
+
+class UserForm(Form):
+    username = StringField('Username')
+    name = StringField('Full name')
+    email = StringField('Email')
+    phone = StringField('Phone')
+    password = StringField('Password')
 
 # THE APP
 
@@ -61,23 +70,35 @@ def addBiz():
             'contact': form.contact.data, 'email': form.email.data, 'phone': str(form.phone.data),
             'ebitda': int(str(form.ebitda.data))})
         flash("You successfully entered your enterprise", "success")
-        time.sleep(0.1)
         return redirect(url_for('ent', id=newId))
 
     return render_template('addbiz.html', form=form, newId=newId)
 
 @app.route("/login", methods=['POST', 'GET'])
 def login():
-    return 0
+    return render_template('login.html')
 
-@app.route("/register", methods=['POST, GET'])
+@app.route("/register/", methods=['POST', 'GET'])
 def register():
-    if request.method = 'POST':
-        existingUser = mongo.db.users.find_one({'name' : request.form['username']})
+    form = UserForm(request.form)
 
-        if not existingUser:
-            hashpass = bcrypt.hashpw(request.form['password'])
+    if request.method == 'POST' and form.validate():
+        if mongo.db.users.find({'username': form.username.data}).count() > 0:
+            flash("Username already exists", "danger")
+            return render_template('register.html', form=form, newId=newId)
+        if mongo.db.users.find({'email': form.email.data}).count() > 0:
+            flash("Email already in use", "danger")
+            return render_template('register.html')
 
+        mongo.db.users.insert({'name': form.name.data, 'username': form.username.data, 'email': form.email.data,
+                                     'phone': form.phone.data, 'password': form.password.data})
+        flash("Your account has been created successfully", "success")
+        return redirect(url_for('login'))
+        # existingUser = mongo.db.users.find_one({'name' : request.form['username']})
+
+        # if not existingUser:
+        #    hashpass = bcrypt.hashpw(request.form['password'])
+    return render_template('register.html', form=form)
 
 if __name__ == '__main__':
     app.secret_key = "secr3tkey"

@@ -15,13 +15,10 @@
 
 <form method="POST" action="">
     <div class="form-group">
-        {{ render_field (form.ent_name, class_="form-control") }}
+        {{ render_field (form.username, class_="form-control") }}
     </div>
     <div class="form-group">
-        {{ render_field (form.neq, class_="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ render_field (form.contact, class_="form-control") }}
+        {{ render_field (form.name, class_="form-control") }}
     </div>
     <div class="form-group">
         {{ render_field (form.email, class_="form-control") }}
@@ -30,7 +27,7 @@
         {{ render_field (form.phone, class_="form-control") }}
     </div>
     <div class="form-group">
-        {{ render_field (form.ebitda, class_="form-control") }}
+        {{ render_field (form.password, class_="form-control") }}
     </div>
     <p><input type="submit" class="btn btn-primary" value="Submit"</p>
 </form>
