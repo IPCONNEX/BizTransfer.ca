@@ -21,12 +21,12 @@ posts = db.enterprisesDB
 
 
 class EnterpriseForm(Form):
-    ent_name = StringField('Enterprise name', [validators.length(min=5, max= 50)])
-    neq = DecimalField('NEQ')
-    contact = StringField('Contact name', [validators.length(min=5, max= 50)])
-    email = StringField('Email', [validators.length(min=6, max= 50)])
-    phone = DecimalField('Phone')
-    ebitda = DecimalField('EBITDA')
+    ent_name = StringField('', [validators.length(min=5, max= 50)])
+    neq = DecimalField('')
+    contact = StringField('', [validators.length(min=5, max= 50)])
+    email = StringField('', [validators.length(min=6, max= 50)])
+    phone = DecimalField('')
+    ebitda = DecimalField('')
 
 
 class UserForm(Form):
