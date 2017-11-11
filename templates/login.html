@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+
+<div class="container panel-default col-sm-12">
+<!-- Fields test -->
+
+    {% from "includes/_formhelpers.html" import render_field %}
+
+<form method="POST" action="">
+    <div class="form-group">
+        {{ render_field (form.username, class_="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ render_field (form.password, class_="form-control") }}
+    </div>
+
+    <p><input type="submit" class="btn btn-outline-success col-md-push pull-right" value="Login"</p>
+</form>
+</div>
+
+
+<div class="container panel-default col-sm-12">
+
+<hr>
+
+<div class="center-block text-center">
+    New user?<br><br>
+<a class="btn btn-outline-primary btn-lg" href="/signup" role="button">Sign up</a>
+</div>
+</div>
+
+{% endblock %}

@@ -8,7 +8,7 @@
 <body>
 
 
-{% include "_navbar.html" %}
+{% include "includes/_navbar.html" %}
 
 
 <div class="container">
@@ -17,7 +17,7 @@
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
       <div class="list-group">
-            <a href="#" class="list-group-item active">{{ self }}</a>
+            <a href="#" class="list-group-item active">{{ session['name'] }}</a>
             <a href="#" class="list-group-item">Link</a>
             <a href="#" class="list-group-item">Link</a>
             <a href="#" class="list-group-item">Link</a>
@@ -26,19 +26,23 @@
             <a href="#" class="list-group-item">Link</a>
             <a href="#" class="list-group-item">Link</a>
             <a href="#" class="list-group-item">Link</a>
-            <a href="/add-biz" class="list-group-item">Add new listing</a>
+            <a href="/add-biz/" class="list-group-item">Add new listing</a>
       </div>
 
     </div><!--/.sidebar-offcanvas-->
 
     <div class="col-xs-12 col-sm-9">
-      <p class="pull-right visible-xs">
+      <p class="pull-right visible-xs" style="text-align: center">
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
       </p>
 
-        {% include "includes/_messages.html" %}
+
+
+{% include "includes/_messages.html" %}
 
 {% block content %}
+
+<!-- BODY COMES HERE  -->
 
 
 {% endblock %}
@@ -54,12 +58,13 @@
 <div class="container-fluid container">
   <div class="row">
 
-            <hr>
-            <footer>
-            <p>&copy; 2017 BizTransfer Inc.</p>
-            </footer>
+    <hr>
+    <footer>
+    <p>&copy; 2017 BizTransfer Inc.</p>
+    </footer>
+    <hr>
 
-      </div>
+  </div>
 </div>
 
 
@@ -69,14 +74,21 @@
 
 
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <!-- Optional theme -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Old version 3.3.7
+-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+<!-- Bootstrap 4 beta
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+-->
 </body>
 </html>
