@@ -3,9 +3,9 @@
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="icon-bar">icon1</span>
+            <span class="icon-bar">icon2</span>
+            <span class="icon-bar">icon3</span>
           </button>
           <a class="navbar-brand" href="/">BizTransfer.ca</a>
         </div>
@@ -15,11 +15,18 @@
             </form>
 
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/">Dashboard</a></li>
+
+          {% if session['logged'] %}
+            <li><a href="/dashboard/">Dashboard</a></li>
             <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="#">{{ session['name'] }}</a></li>
+            <li><a href="/logout">Logout</a></li>
+          {% else %}
+
+            <li><a href="/signup">Sign up</a></li>
             <li><a href="/login">Login</a></li>
+          {% endif %}
+
           </ul>
 
         </div>

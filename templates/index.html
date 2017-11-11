@@ -6,7 +6,46 @@
 <div class="jumbotron">
   <h2>Welcome the BizTransfer App</h2>
   <p>BizTransfer is website that offers matching business owners who want to sell their businesses with potential investors</p>
+
+  {% if session.logged == NULL %}
+    <a href="/signup/" class="btn btn-lg btn-primary">Sign up</a>
+    <a href="/login/" class="btn btn-lg btn-success">Login</a>
+  {% endif %}
+
 </div>
+
+
+
+<form class="form-horizontal">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Remember me
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Sign in</button>
+    </div>
+  </div>
+</form>
+
+
 
     {% for item in data %}
 
@@ -15,7 +54,7 @@
   <div class="panel-heading">
     <h3 class="panel-title"><a href="/ent/{{ item['id'] }}">{{ item['entr_name'] }}</a>
     {% if item['neq'] == '0000000000' %}
-    <span class="label label-success">NEW</span>
+    <span class="badge badge-pill badge-warning">NEW</span>
     {% endif %}
     </h3>
   </div>

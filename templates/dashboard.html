@@ -1,0 +1,37 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+
+<div class="jumbotron">
+  <h2>Welcome {{ session['name'] }}</h2>
+</div>
+
+<div class="bs-callout bs-callout-warning"><p>This is your dashboard where you can see you listed compagnies, favorites and make updates</p></div>
+
+    {% for item in myEnter %}
+
+
+
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><a href="/ent/{{ item['id'] }}">{{ item['entr_name'] }}</a>
+    {% if item['neq'] == '0000000000' %}
+    <span class="label label-success">NEW</span>
+    {% endif %}
+    </h3>
+  </div>
+  <div class="panel-body">
+    NEQ : {{ item['neq'] }}
+  </div>
+</div>
+
+
+    {% endfor %}
+
+{% endblock %}
+
