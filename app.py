@@ -5,23 +5,24 @@ from pymongo import MongoClient
 from flask import render_template, request, Flask, flash, redirect, url_for, session, logging
 from random import randint
 from wtforms import Form, StringField, TextAreaField, PasswordField, DecimalField, validators
+from functools import wraps
 from passlib.hash import sha256_crypt
 from lib.BizTransfer import Enterprise
+from lib.AppDB import AppDB
 from flask_pymongo import PyMongo
 import time
 import json
+import pprint
 
 
-
-client = MongoClient('ds243055.mlab.com', 43055)
-db = client['biztransfer']
-db.authenticate('mac', 'mac')
-enterprisesDB = db['enterprises']
-posts = db.enterprisesDB
+DB = AppDB()
+usersDB = DB.GetUsersDB()
+enterprisesDB = DB.GetEnterprisesDB()
+STATICS = DB.GetLanguageStatics('english')
 
 
 class EnterpriseForm(Form):
-    ent_name = StringField('Enterprise name', [validators.length(min=5, max= 50)])
+    ent_name = StringField('', [validators.length(min=5, max= 50)])
     neq = DecimalField('NEQ')
     contact = StringField('Contact name', [validators.length(min=5, max= 50)])
     email = StringField('Email', [validators.length(min=6, max= 50)])
@@ -36,69 +37,108 @@ class UserForm(Form):
     phone = StringField('Phone')
     password = StringField('Password')
 
+
 # THE APP
 
 app = Flask(__name__)
-app.config['MONGO_DBNAME'] = 'biztransfer'
-app.config['MONGO_URI'] = 'mongodb://mac:mac@ds243055.mlab.com:43055/biztransfer'
-mongo = PyMongo(app)
+
+
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged' in session:
+            return f(*args, **kwargs)
+        else:
+            flash ("You are not authorized, Please login", 'error')
+            return redirect(url_for('login'))
+    return wrap
+
 
 @app.route("/", methods=["GET"])
 def index():
-    data = mongo.db.enterprises.find()
-    return render_template('index.html', data=data)
+    enterprisesDB.find()
+    #  session['lang'] = mongo.db.statics.find_one({"language": "english"})
+    #  print((session['lang']))
+    return render_template('index.html', enterprisesDB=enterprisesDB.find(), STATICS=STATICS)
+
+
+@app.route("/listings/", methods=["GET"])
+def listings():
+    return render_template('listings.html', enterprisesDB=enterprisesDB.find({'valide':True}),STATICS=STATICS)
+
 
 @app.route("/ent/<string:id>/", methods=["GET"])
+@is_logged_in
 def ent(id):
-    result = mongo.db.enterprises.find_one({"id":id})
-    return render_template('entreprise.html', result=result, id=id)
+    profile = enterprisesDB.find_one({"id":id})
+    enterprisesDB.update_one({'id':id}, {'$inc':{'visits': 1}})
+    return render_template('profile.html', profile=profile, STATICS=STATICS)
 
-@app.route("/add-biz/", methods=["GET", "POST"])
-def addBiz():
-    IdList = [0]  # this should be populated with all existing IDs
+
+@app.route("/newpost/", methods=["GET", "POST"])
+@is_logged_in
+def newpost():
+
+    #  get a random non-existing ID for the entry
     while True:
         newId = str(randint(1, 999999)).rjust(6, '0')
-        if newId not in IdList:
+        if not enterprisesDB.find({"id":newId}).count():
             break
-    form = EnterpriseForm(request.form)
 
-    if request.method == 'POST' and form.validate():
-        if mongo.db.enterprises.find({'neq' : str(form.neq.data)}).count() > 0:
-            flash("This company already exists", "danger")
-            return render_template('addbiz.html', form=form, newId=newId)
-        mongo.db.enterprises.insert({'id':newId, 'entr_name': form.ent_name.data, 'neq': str(form.neq.data),
-            'contact': form.contact.data, 'email': form.email.data, 'phone': str(form.phone.data),
-            'ebitda': int(str(form.ebitda.data))})
+    if request.method == 'POST':
+        if enterprisesDB.find({'neq' : request.form['neq']}).count() > 0:
+            flash("This company already exists", "error")
+            return render_template('newpost.html', newId=newId, STATICS=STATICS)
+        enterprisesDB.insert({'id':newId, 'entr_name': request.form['business_name'], 'neq': request.form['neq'],
+            'contact': request.form['contact_name'], 'email': request.form['contact_email'], 'phone': request.form['contact_phone'],
+            'ask_price': request.form['ask_price'], 'valide': False, 'created':time.time(), 'owner':session['email']})
         flash("You successfully entered your enterprise", "success")
-        return redirect(url_for('ent', id=newId))
+        return redirect(url_for('index', id=newId))
 
-    return render_template('addbiz.html', form=form, newId=newId)
+    return render_template('newpost.html', newID=newId, STATICS=STATICS)
 
-@app.route("/login", methods=['POST', 'GET'])
+
+@app.route("/login/", methods=['POST', 'GET'])
 def login():
-    return render_template('login.html')
+    #TODO  find language using: request.environ
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        hashPass = usersDB.find_one({'email':email})['password']
+        if usersDB.find_one({'email': email}):
+            if sha256_crypt.verify(password, hashPass):
+                session['logged'] = True
+                session['username'] = usersDB.find_one({'email': email})['name']
+                session['email'] = email
+                flash("Login successful", "success")
+                return redirect(url_for('index'))
+        else:
+            flash("Wrong combination username/password", "error")
 
-@app.route("/register/", methods=['POST', 'GET'])
-def register():
-    form = UserForm(request.form)
+    return render_template('login.html', STATICS=STATICS)
 
-    if request.method == 'POST' and form.validate():
-        if mongo.db.users.find({'username': form.username.data}).count() > 0:
-            flash("Username already exists", "danger")
-            return render_template('register.html', form=form, newId=newId)
-        if mongo.db.users.find({'email': form.email.data}).count() > 0:
-            flash("Email already in use", "danger")
-            return render_template('register.html')
 
-        mongo.db.users.insert({'name': form.name.data, 'username': form.username.data, 'email': form.email.data,
-                                     'phone': form.phone.data, 'password': form.password.data})
+@app.route("/signup/", methods=['POST', 'GET'])
+def signup():
+    if request.method == 'POST':
+        if usersDB.find({'email': request.form['email']}).count() > 0:
+            flash("Email already used by another account", "error")
+            return render_template('signup.html', STATICS=STATICS)
+
+        hashPassword = sha256_crypt.encrypt(request.form['password']).encode()
+        usersDB.insert({'name': request.form['name'], 'email': request.form['email'], 'phone': request.form['phone'],
+                        'password': hashPassword})
         flash("Your account has been created successfully", "success")
         return redirect(url_for('login'))
-        # existingUser = mongo.db.users.find_one({'name' : request.form['username']})
 
-        # if not existingUser:
-        #    hashpass = bcrypt.hashpw(request.form['password'])
-    return render_template('register.html', form=form)
+    return render_template('signup.html', STATICS=STATICS)
+
+
+@app.route("/signout/", methods=['GET'])
+def logout():
+    session.clear()
+    flash('Successfully logged out of your session', "info")
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.secret_key = "secr3tkey"

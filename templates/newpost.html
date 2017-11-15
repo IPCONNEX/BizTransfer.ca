@@ -1,41 +1,80 @@
 
-{% extends "layout.html" %}
+{% extends "includes/layout.html" %}
 
 {% block content %}
 
 
 
+<!--
+{% from "includes/_formhelpers.html" import render_field %}
+-->
 
-<div class="container panel-default col-sm-12">
 
 
-<!-- Fields test -->
 
-    {% from "includes/_formhelpers.html" import render_field %}
+<div class="ui container basic segment">
+    <div class="ui huge header">Enter information for your business</div>
+    <p class="ui medium header">BizTransfer is website that offers matching business owners who want to sell their businesses with potential investors</p>
 
-<form method="POST" action="">
-    <div class="form-group">
-        {{ render_field (form.ent_name, class_="form-control") }}
+    <div class="ui grid">
+        <div class="ui column row"></div>
+        <div class="ui column row">
+            <div class="ui three wide computer column computer only"></div>
+            <div class="ui ten wide computer eight wide tablet column">
+                <div class="ui segment stretched">
+
+                    <form method="POST" class="ui form" action="">
+                        <div class="field">
+                            <label>Business Name</label>
+                            <input type="text" name="business_name" placeholder="Business name">
+                        </div>
+                        <div class="field">
+                            <label>Last Name</label>
+                            <input type="text" name="neq" placeholder="NEQ">
+                        </div>
+                        <div class="field">
+                            <label>Contact name</label>
+                            <input type="text" name="contact_name" placeholder="First name Last name">
+                        </div>
+                        <div class="field">
+                            <label>Contact Email</label>
+                            <input type="text" name="contact_email" placeholder="name@domain">
+                        </div>
+                        <div class="field">
+                            <label>Contact phone</label>
+                            <input type="text" name="contact_phone" placeholder="(xxx) xxx-xxxx">
+                        </div>
+                        <div class="field">
+                            <label>Asking price</label>
+                            <input type="text" name="ask_price" placeholder="">
+                        </div>
+
+                        <input type="submit" class="ui animated large button primary green fluid" value="Next"></input>
+                    </form>
+
+                </div>
+            </div>
+            <div class="ui three wide column computer only"></div>
+        </div>
     </div>
-    <div class="form-group">
-        {{ render_field (form.neq, class_="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ render_field (form.contact, class_="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ render_field (form.email, class_="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ render_field (form.phone, class_="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ render_field (form.ebitda, class_="form-control") }}
-    </div>
-    <p><input type="submit" class="btn btn-primary" value="Submit"</p>
-</form>
+</div>
 
 
+
+
+
+
+
+
+
+
+
+
+<script>
+    $('#toggle').click(function(){
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>
 
 <!-- Fields test ends
 
@@ -128,7 +167,7 @@
 
 
 
-</div>
+
 
 
 
