@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MongoConfiguration">
+    <option name="serverConfigurations">
+      <list>
+        <ServerConfiguration>
+          <option name="label" value="mLab" />
+          <option name="password" value="Realm0unt" />
+          <option name="serverUrls">
+            <list>
+              <option value="ds243055.mlab.com:43055" />
+            </list>
+          </option>
+          <option name="sshTunnelingConfiguration">
+            <SshTunnelingConfiguration />
+          </option>
+          <option name="username" value="oelmohri" />
+        </ServerConfiguration>
+      </list>
+    </option>
+    <option name="shellPath" value="mongodb://mac:mac@ds243055.mlab.com:43055/biztransfer" />
+  </component>
+</project>

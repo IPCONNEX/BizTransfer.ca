@@ -1,7 +1,7 @@
 #! /Users/omarelmohri/.venvs/lpthw/bin/python
 # sample for web app to display the database content
 
-from pymongo import MongoClient
+#   from pymongo import MongoClient #  Using from lib instead
 from flask import render_template, request, Flask, flash, redirect, url_for, session, logging
 from random import randint
 from wtforms import Form, StringField, TextAreaField, PasswordField, DecimalField, validators
@@ -9,10 +9,8 @@ from functools import wraps
 from passlib.hash import sha256_crypt
 from lib.BizTransfer import Enterprise
 from lib.AppDB import AppDB
-from flask_pymongo import PyMongo
 import time
 import json
-import pprint
 
 
 DB = AppDB()
@@ -112,6 +110,7 @@ def login():
                 session['email'] = email
                 flash("Login successful", "success")
                 return redirect(url_for('index'))
+                #TODO return to the previous page that sent it to the login
         else:
             flash("Wrong combination username/password", "error")
 
@@ -121,6 +120,7 @@ def login():
 @app.route("/signup/", methods=['POST', 'GET'])
 def signup():
     if request.method == 'POST':
+        #TODO form validation with JavaScript
         if usersDB.find({'email': request.form['email']}).count() > 0:
             flash("Email already used by another account", "error")
             return render_template('signup.html', STATICS=STATICS)
